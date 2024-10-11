@@ -1,0 +1,99 @@
+create database relojoaria;
+use relojoaria;
+
+create table cliente (
+	ID_cliente INT auto_increment PRIMARY KEY,
+    nome varchar(155) NOT NULL,
+    cpf VARCHAR(20) not null,
+    data_nascimento date,
+    ID_endereco INT,
+    FOREIGN KEY (ID_endereco) references endereco(ID_endereco),
+    ID_telefone INT,
+    FOREIGN KEY (ID_telefone) references telefone(ID_telefone),
+    ID_email INT,
+    FOREIGN KEY (ID_email) references email(ID_email)
+    );
+
+create table fornecedor (
+	ID_fornecedor INT auto_increment PRIMARY KEY,
+    razao_social VARCHAR (155),
+    nome_fantasia VARCHAR(155),
+    cnpj varchar(50),
+    ID_endereco INT,
+    FOREIGN KEY(ID_endereco) references fornecedor(ID_endereco),
+    ID_telefone INT,
+    FOREIGN KEY(ID_telefone) references fornecedor(ID_telefone),
+    ID_email INT,
+    FOREIGN KEY (ID_email) references email(ID_email)
+    );
+    
+create table email (
+	ID_email INT auto_increment PRIMARY KEY,
+	ID_cliente INT,
+    ID_fornecedor INT,
+    email VARCHAR(155),
+    FOREIGN KEY (ID_cliente) references cliente(ID_cliente),
+    FOREIGN KEY(ID_fornecedor) references fornecedor(ID_fornecedor)
+);
+
+create table telefone (
+	ID_telefone int auto_increment primary key,
+    id_cliente INT,
+    FOREIGN KEY (ID_cliente) references cliente(ID_cliente),
+    id_fornecedor INT,
+    FOREIGN KEY(ID_fornecedor) references fornecedor(ID_fornecedor),
+    telefone varchar(30)
+);
+
+create table endereco (
+	ID_endereco int auto_increment primary key,
+    ID_cliente int,
+	FOREIGN KEY (ID_cliente) references cliente(ID_cliente),
+    ID_fornecedor int,
+    FOREIGN KEY(ID_fornecedor) references fornecedor(ID_fornecedor),
+    rua varchar(155) not null,
+    numero int not null,
+    bairro varchar(155),
+    cidade varchar(155),
+    uf varchar(155),
+    cep varchar(50) not null
+);
+
+create table produto (
+	ID_produto int auto_increment primary key,
+    nome varchar(155),
+    modelo varchar(50),
+    marca varchar(50),
+    tipo_de_lente varchar (50),
+    cor_da_armacao varchar (50),
+    material_da_armacao varchar(50),
+    valor float(50),
+    ID_estoque int,
+    FOREIGN KEY (ID_estoque) references estoque(ID_estoque),
+    ID_fornecedor int,
+    FOREIGN KEY(ID_fornecedor) references fornecedor(ID_fornecedor)
+);
+
+create table estoque (
+	ID_estoque int auto_increment primary key,
+    quantidade_disponivel varchar (50) not null
+);
+
+create table venda (
+	ID_venda int auto_increment primary key,
+    data_venda date,
+	ID_cliente INT,
+    FOREIGN KEY (ID_cliente) references cliente(ID_cliente),
+    total int
+);
+
+create table itens_venda (
+	ID_itensvenda int auto_increment primary key,
+    ID_venda int,
+    FOREIGN KEY (ID_venda) references venda(ID_venda),
+    ID_produto int,
+    FOREIGN KEY (ID_produto) references produto(ID_produto),
+    quantidade varchar(155),
+    valor_unitario varchar(155)
+);
+
